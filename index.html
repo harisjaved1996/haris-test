@@ -1,0 +1,66 @@
+<!-- https://donation-widget.vercel.app -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      // Global variable to store the received data
+      var receivedData = [];
+      var total;
+      function handleMessage(event) {
+        console.log(event.data, "coming from widget");
+        // Ensure the message comes from an expected origin (e.g., your domain)
+        // Replace "your_domain" with the actual domain you expect messages from
+        if (event.origin !== "https://donation-widget.vercel.app") {
+          return;
+        }
+
+        const { donationData, totalAmount } = event.data;
+
+        receivedData = donationData;
+        total = totalAmount;
+        console.log(receivedData, total, "widget handle");
+        document.getElementById(
+          "widgetData"
+        ).innerHTML = `Total amount that user donated is :${total}`;
+      }
+
+      function handleIframeLoad() {
+        const iframe = document.getElementById("myIframe");
+        const message = { type: "INITIALIZE" };
+        iframe.contentWindow.postMessage(
+          message,
+          "https://donation-widget.vercel.app"
+        );
+      }
+
+      // Add event listeners when the DOM is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        window.addEventListener("message", handleMessage);
+
+        var iframe = document.getElementById("myIframe");
+        iframe.addEventListener("load", handleIframeLoad);
+      });
+    </script>
+  </head>
+  <body>
+    <iframe
+      src="https://donation-widget.vercel.app"
+      style="
+        position: fixed;
+        width: 30%;
+        height: 500px;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        background: none;
+        border: none;
+      "
+      title="Widget IFrame"
+      id="myIframe"
+    ></iframe>
+    <div id="widgetData"></div>
+  </body>
+</html>

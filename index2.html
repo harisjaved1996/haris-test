@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Embedded Website</title>
+</head>
+<body>
+    <h1>Welcome to Embedded Website</h1>
+
+    <button onclick="performAction()">Perform Action</button>
+
+    <script>
+        // Function to perform an action and send a message back to the parent website
+        function performAction() {
+            // Perform your action here
+            console.log('Action performed in the embedded website.');
+
+            // Send a message to the parent website
+            window.parent.postMessage('Action performed in the embedded website.', 'https://yourwebsite.com');
+        }
+    </script>
+</body>
+</html>
